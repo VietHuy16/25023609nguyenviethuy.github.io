@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyễn Viết Huy's Portfolio.</title>
+    <style>
+        /* CSS Variables cho tông màu */
+        :root {
+            --mint-green: #6ee7b7;
+            --mint-hover: #34d399;
+            --dark-bg: rgba(23, 23, 23, 0.85);
+            --glass-bg: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            /* Hình nền mây trời/biển anime tương tự ảnh */
+            background: url('https://i.postimg.cc/xjXd2C6K/nen-desktop-2.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            zoom: 0.9;
+        }
+
+        /* Lớp phủ tối để chữ dễ đọc hơn */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.3), rgba(15, 23, 42, 0.7));
+            z-index: -1;
+        }
+
+        /* HEADER & NAVIGATION */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .logo span {
+            color: var(--mint-green);
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        nav button {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            padding: 8px 20px;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            color: var(--text-main);
+        }
+
+        nav button.active {
+            background: var(--mint-green);
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        /* CONTAINER CHÍNH */
+        main {
+            flex: 1;
+            max-width: 1000px; /* Đã thu nhỏ độ rộng tại đây */
+            margin: 40px auto;
+            width: 90%;
+            padding: 0 20px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* UI COMPONENTS - GLASSMORPHISM */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(110, 231, 183, 0.2);
+            color: var(--mint-green);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            border: 1px solid var(--mint-green);
+        }
+
+        /* --- TRANG GIỚI THIỆU --- */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .profile-pic {
+            width: 130px;  /* Nhích khung viền ngoài to lên một chút xíu cho thoáng */
+            height: 130px;
+            border-radius: 50%;
+            border: 4px solid var(--mint-green);
+            padding: 6px; /* THẦN CHÚ Ở ĐÂY: Ép ảnh bên trong nhỏ lại 6px so với viền */
+            object-fit: cover;
+            object-position: center 20%; 
+            background: rgba(255, 255, 255, 0.15); /* Tạo một lớp nền kính mờ lót sau ảnh cực kỳ hiện đại */
+        }
+
+        .profile-info h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .profile-info h1 span {
+            color: var(--mint-green);
+        }
+
+        .profile-info p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .grid-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-item h4 {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .info-item p {
+            font-size: 1.1rem;
+        }
+
+        /* --- TRANG DỰ ÁN (LAYOUT SIDEBAR CHIA ĐÔI) --- */
+        .project-container {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px 10px;
+            position: sticky;
+            top: 90px;
+        }
+
+        .sidebar-title {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-left: 15px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .task-btn {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            text-align: left;
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .task-btn:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .task-btn.active {
+            background: rgba(110, 231, 183, 0.8);
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .task-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .task-btn.active .task-num {
+            background: #0f172a;
+            color: var(--mint-green);
+        }
+
+        .project-content {
+            flex: 1;
+        }
+
+        .task-detail {
+            display: none;
+        }
+
+        .task-detail.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .btn-download {
+            display: inline-block;
+            background: rgba(110, 231, 183, 0.2);
+            color: var(--mint-green);
+            border: 1px solid var(--mint-green);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+
+        .btn-download:hover {
+            background: var(--mint-green);
+            color: #0f172a;
+        }
+
+        .content-block h3 {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .content-block h3 span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(110, 231, 183, 0.2);
+            color: var(--mint-green);
+        }
+
+        .text-box {
+            background: rgba(0,0,0,0.2);
+            border-left: 4px solid var(--mint-green);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .code-block {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #e2e8f0;
+            margin: 10px 0;
+        }
+
+        /* ĐÃ TỐI ƯU HÓA ẢNH: Giữ nguyên độ nét, ép khuôn chiều cao, tự động căn giữa */
+        .report-img {
+            max-width: 100%; 
+            max-height: 450px; 
+            width: auto; 
+            height: auto;
+            object-fit: contain; 
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            margin: 20px auto; 
+            display: block;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .img-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        /* --- TRANG TỔNG KẾT --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+        }
+
+        .stat-card h2 {
+            color: var(--mint-green);
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .document-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .doc-item {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid transparent;
+            transition: 0.3s;
+            text-decoration: none; /* Xóa gạch chân của link */
+            color: var(--text-main); /* Giữ nguyên màu chữ trắng */
+            cursor: pointer; /* Biến con trỏ thành hình bàn tay khi di chuột vào */
+        }
+        
+        .doc-item:hover {
+            border-color: var(--mint-green);
+        }
+
+        /* WIDGET NHẠC GÓC DƯỚI */
+        .music-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 30px;
+            padding: 8px 15px 8px 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .play-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--mint-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f172a;
+        }
+/* --- BẢN TỐI ƯU DÀN TRANG PDF (FINAL BOSS) --- */
+        @page {
+            size: A4;
+            margin: 15mm; /* Căn lề giấy A4 cực chuẩn */
+        }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                box-shadow: none !important; /* Xóa bóng đổ giúp file nhẹ, nét và không lag */
+                text-shadow: none !important;
+            }
+            
+            body {
+                background: #0f172a !important; 
+                zoom: 0.8 !important; 
+            }
+
+            /* 1. Ẩn toàn bộ UI thừa */
+            header, .overlay, .sidebar, .music-widget, .btn-download {
+                display: none !important;
+            }
+
+            /* 2. Ép dàn trang từ trên xuống (Chống lỗi trắng trang Flexbox) */
+            .project-container, .project-content {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            /* 3. Hiển thị tất cả nội dung ẩn */
+            .section, .task-detail {
+                display: block !important;
+                opacity: 1 !important;
+                margin-bottom: 40px !important;
+            }
+
+            /* 4. Tối ưu ngắt trang: Cho phép chia cắt khung lớn, nhưng khóa các khối nhỏ */
+            .glass-card, .project-content, .task-detail {
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+            }
+            
+            /* Đã thêm .code-block vào danh sách cấm cắt đôi dưới đây */
+            .text-box, .code-block, .report-img, .step-title, h3, h4, .info-item {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            /* 5. Tối ưu văn bản chuẩn sách in */
+            p {
+                orphans: 3 !important; /* Không để rớt 1-2 dòng mồ côi ở cuối/đầu trang */
+                widows: 3 !important;
+                page-break-inside: auto !important; 
+            }
+
+            /* 6. Tối ưu Bảng biểu (Table) hiển thị chuyên nghiệp */
+            table { page-break-inside: auto !important; width: 100% !important; }
+            tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+            thead { display: table-header-group !important; }
+
+            /* 7. Sang trang mới cho các mục lớn */
+            #du-an, #tong-ket {
+                page-break-before: always;
+            }
+        
+        
+        
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <header>
+        <div class="logo">Nguyễn Viết Huy's <span>Portfolio.</span></div>
+        <nav>
+            <button class="nav-btn active" onclick="switchPage('gioi-thieu', this)">Giới thiệu</button>
+            <button class="nav-btn" onclick="switchPage('du-an', this)">Dự án</button>
+            <button class="nav-btn" onclick="switchPage('tong-ket', this)">Tổng kết</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="gioi-thieu" class="section active">
+            <div class="badge">TRANG 1 / 3</div>
+            
+            <div class="profile-header">
+                <img src="https://i.postimg.cc/KzyrzggC/Anh-Huy.jpg" alt="Avatar" class="profile-pic">
+                <div class="profile-info">
+                    <h1>Xin chào, tôi là <span>Nguyễn Viết Huy</span></h1>
+                    <p>Kỹ thuật Robot, ĐH Công nghệ (ĐHQGHN) — Cấu trúc dữ liệu & Tư duy hệ thống</p>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="margin-bottom: 20px; font-size: 1.2rem;">Thông tin cá nhân</h3>
+                <div class="grid-info">
+                    <div class="info-item">
+                        <h4>Họ và Tên</h4>
+                        <p>Nguyễn Viết Huy</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Ngành học & Trường</h4>
+                        <p>Kỹ thuật Robot, ĐH Công nghệ (UET) - ĐHQGHN</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Email</h4>
+                        <p>25023609@vnu.edu.vn</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Môn học</h4>
+                        <p>Nhập môn Công nghệ số và Ứng dụng AI</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; border-top: 1px solid var(--glass-border); padding-top: 25px;">
+                    <h3 style="margin-bottom: 15px; color: var(--mint-green); font-size: 1.2rem;">Sở thích cá nhân</h3>
+                    <p style="line-height: 1.6; color: var(--text-muted);">
+                        Tôi là người dung hòa được tư duy logic của một sinh viên kỹ thuật và tinh thần sáng tạo nghệ thuật. Đam mê cốt lõi của tôi nằm ở việc khám phá các thiết bị điện tử, nghiên cứu chuyên sâu về robot, vi điều khiển (như Arduino) và thiết kế cơ khí trên AutoCAD. Song song với tình yêu dành cho khoa học ứng dụng, tôi chọn cách cân bằng nhịp sống thông qua việc quản lý nội dung cộng đồng trực tuyến và sở thích nấu ăn. Những hoạt động này không chỉ giúp tôi thư giãn mà còn là nguồn cảm hứng tươi mới mỗi ngày.
+                    </p>
+                </div>
+           
+            </div>
+
+            <div class="glass-card">
+                <h3 style="margin-bottom: 15px; color: var(--mint-green);">Mục tiêu học tập & Phát triển cá nhân</h3>
+                <p style="line-height: 1.6; color: var(--text-muted);">
+                    Thông qua môn học này, tôi hướng đến việc thành thạo các kỹ năng số thiết yếu và phương pháp tổ chức dữ liệu thông minh, kết hợp sử dụng hiệu quả các công cụ AI để tối ưu hóa hiệu suất học tập trên giảng đường. Đặc biệt, tôi tập trung ứng dụng những kỹ năng này vào việc tra cứu tài liệu chuyên ngữ và nghiên cứu chuyên sâu các công nghệ mới trong lĩnh vực Robotics.
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="margin-bottom: 15px; color: var(--mint-green);">Mục tiêu của Portfolio này</h3>
+                <p style="line-height: 1.6; color: var(--text-muted);">
+                    Portfolio này là nơi lưu trữ, hệ thống hóa và số hóa toàn bộ quá trình học tập, thực hành của tôi trong học kỳ. Mục tiêu của không gian này là giúp tôi dễ dàng đánh giá tiến trình phát triển kỹ năng số và năng lực kỹ thuật của bản thân, từ những thao tác hệ điều hành căn bản cho đến các kỹ năng phân tích dữ liệu và nghiên cứu chuyên sâu phục vụ cho chuyên ngành.
+                </p>
+            </div>
+        </section>
+
+        <section id="du-an" class="section">
+
+            <div class="badge">TRANG 2 / 3</div>
+
+            <h2 style="font-size: 2rem; margin-bottom: 25px;">Dự án & Bài tập</h2>
+
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Chọn một nhiệm vụ bên trái để xem chi tiết tiến trình thực hiện.</p>
+            
+            <div class="project-container">
+                <div class="sidebar">
+                    <div class="sidebar-title">6 NHIỆM VỤ</div>
+                    <button class="task-btn active" onclick="switchTask('task1', this)">
+                        <div class="task-num">1</div> Quản lý tệp & thư mục
+                    </button>
+                    <button class="task-btn" onclick="switchTask('task2', this)">
+                        <div class="task-num">2</div> Tìm kiếm thông tin
+                    </button>
+                    <button class="task-btn" onclick="switchTask('task3', this)">
+                        <div class="task-num">3</div> Viết Prompt hiệu quả
+                    </button>
+                    <button class="task-btn" onclick="switchTask('task4', this)">
+                        <div class="task-num">4</div> Hợp tác trực tuyến
+                    </button>
+                    <button class="task-btn" onclick="switchTask('task5', this)">
+                        <div class="task-num">5</div> Sáng tạo với AI
+                    </button>
+                    <button class="task-btn" onclick="switchTask('task6', this)">
+                        <div class="task-num">6</div> AI có trách nhiệm
+                    </button>
+                </div>
+
+                <div class="project-content glass-card">
+                    
+                    <div id="task1" class="task-detail active">
+    <a href="BaoCao_Bai1.pdf" target="_blank" class="btn-download">↓ Tải báo cáo PDF — Bài 1 — Thao tác cơ bản với tệp tin và thư mục</a>
+    
+    <div class="content-block">
+        <h3><span>1</span> Quản lý tệp và thư mục cơ bản</h3>
+        
+        <div class="text-box">
+            <strong>MỤC TIÊU BÀI TẬP</strong><br>
+            Rèn luyện kỹ năng tạo, đổi tên, sao chép, di chuyển, xóa tệp tin và thư mục một cách thành thạo trên hệ điều hành Windows.
+        </div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">Quy trình thực hành chi tiết</h4>
+
+        <div class="step-title">Bước 1: Mở File Explorer</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Nhấn tổ hợp phím Windows + E hoặc nhấp vào biểu tượng thư mục màu vàng trên thanh tác vụ.</p>
+        <img src="anh1.jpg" alt="Mở File Explorer" class="report-img">
+        <div class="img-caption">Mở File Explorer</div>
+
+        <div class="step-title">Bước 2: Truy cập ổ đĩa/thư mục</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Ở cột bên trái, nhấp vào This PC, sau đó nhấp đúp vào một ổ đĩa không phải ổ hệ thống (ví dụ: ổ D: hoặc E:). Nếu chỉ có ổ C:, hãy vào thư mục Documents.</p>
+        <img src="anh2.jpg" alt="Truy cập ổ đĩa" class="report-img">
+        <div class="img-caption">Truy cập vào phân vùng ổ đĩa</div>
+
+        <div class="step-title">Bước 3: Tạo thư mục mới</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Nhấp chuột phải vào một khoảng trống -> chọn New -> Folder. Đặt tên thư mục là ThucHanh_NguyenVietHuy. Nhấn Enter.</p>
+        <img src="anh3.jpg" alt="Tạo thư mục mới 1" class="report-img">
+        <div class="img-caption">Chọn New -> Folder</div>
+        <img src="anh4.jpg" alt="Tạo thư mục mới 2" class="report-img">
+        <div class="img-caption">Đặt tên thư mục thực hành</div>
+
+        <div class="step-title">Bước 4: Vào thư mục vừa tạo</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Nhấp đúp vào thư mục ThucHanh_NguyenVietHuy.</p>
+        <img src="anh5.jpg" alt="Vào thư mục" class="report-img">
+        <div class="img-caption">Truy cập vào bên trong thư mục</div>
+
+        <div class="step-title">Bước 5: Tạo tệp tin văn bản</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Nhấp chuột phải vào khoảng trống -> New -> Text Document. Đặt tên là Ghi Chu.txt. Nhấn Enter.</p>
+        <img src="anh6.jpg" alt="Tạo tệp văn bản 1" class="report-img">
+        <div class="img-caption">Chọn New -> Text Document</div>
+        <img src="anh7.jpg" alt="Tạo tệp văn bản 2" class="report-img">
+        <div class="img-caption">Khởi tạo tệp Text Document</div>
+
+        <div class="step-title">Bước 6: Đổi tên tệp tin</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Nhấp chuột phải vào tệp Ghi Chu.txt -> chọn Rename. Đổi tên thành GhiChu Quan Trong.txt. Nhấn Enter.</p>
+        <img src="anh8.jpg" alt="Đổi tên tệp tin" class="report-img">
+        <div class="img-caption">Thực hiện Rename tệp tin</div>
+
+        <div class="step-title">Bước 7: Tạo thư mục con</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Trong thư mục ThucHanh_NguyenVietHuy, nhấp chuột phải -> New -> Folder. Đặt tên là TaiLieu.</p>
+        <img src="anh9.jpg" alt="Tạo thư mục con" class="report-img">
+        <div class="img-caption">Khởi tạo thư mục con TaiLieu</div>
+
+        <div class="step-title">Bước 8: Sao chép tệp tin (Copy & Paste)</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Nhấp chuột phải vào tệp Ghi Chu Quan Trong.txt -> chọn Copy (hoặc chọn tệp rồi nhấn Ctrl + C). Nhấp đúp vào thư mục TaiLieu, nhấp chuột phải vào khoảng trống bên trong -> chọn Paste (hoặc nhấn Ctrl + V). Bây giờ bạn có một bản sao của tệp trong thư mục TaiLieu.</p>
+        <img src="anh10.jpg" alt="Sao chép tệp tin 1" class="report-img">
+        <div class="img-caption">Copy tệp tin</div>
+        <img src="anh11.jpg" alt="Sao chép tệp tin 2" class="report-img">
+        <div class="img-caption">Dán (Paste) tệp tin vào thư mục con</div>
+
+        <div class="step-title">Bước 9: Di chuyển tệp tin (Cut & Paste)</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Quay lại thư mục ThucHanh_NguyenVietHuy. Tạo một tệp mới tên là DiChuyen.txt. Nhấp chuột phải vào tệp DiChuyen.txt -> chọn Cut (hoặc chọn tệp rồi nhấn Ctrl + X). Nhấp đúp vào thư mục TaiLieu, nhấp chuột phải vào khoảng trống -> chọn Paste (hoặc nhấn Ctrl+V). Tệp gốc đã biến mất khỏi vị trí cũ và chỉ còn ở vị trí mới.</p>
+        <img src="anh12.jpg" alt="Di chuyển tệp tin 1" class="report-img">
+        <div class="img-caption">Cut tệp tin</div>
+        <img src="anh13.jpg" alt="Di chuyển tệp tin 2" class="report-img">
+        <div class="img-caption">Paste tệp tin sang vị trí mới</div>
+
+        <div class="step-title">Bước 10: Xóa tệp tin</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Trong thư mục TaiLieu, nhấp chuột phải vào tệp Ghi Chu QuanTrong.txt -> chọn Delete. Tệp sẽ được chuyển vào Thùng rác (Recycle Bin).</p>
+        <img src="anh14.jpg" alt="Xóa tệp tin" class="report-img">
+        <div class="img-caption">Xóa tệp tin thông thường</div>
+
+        <div class="step-title">Bước 11: Xóa vĩnh viễn</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Chọn tệp DiChuyen.txt, nhấn giữ phím Shift và nhấn phím Delete. Một cảnh báo sẽ hiện ra. Nếu đồng ý, tệp sẽ bị xóa vĩnh viễn mà không qua Thùng rác.</p>
+        <img src="anh15.jpg" alt="Xóa vĩnh viễn" class="report-img">
+        <div class="img-caption">Bảng cảnh báo khi sử dụng Shift + Delete</div>
+
+        <div class="step-title">Bước 12: Khôi phục từ Thùng rác (Tùy chọn)</div>
+        <p style="color: var(--text-muted); line-height: 1.6;">Tìm biểu tượng Recycle Bin trên màn hình nền, nhấp đúp để mở. Tìm tệp GhiChuQuanTrong.txt đã xóa, nhấp chuột phải vào nó và chọn Restore. Tệp sẽ quay trở lại vị trí ban đầu.</p>
+        <img src="anh16.jpg" alt="Khôi phục tệp" class="report-img">
+        <div class="img-caption">Thao tác Restore trong Thùng rác</div>
+
+    </div>
+</div>
+                                         
+
+                    <div id="task2" class="task-detail">
+    <a href="BaoCao_Bai2.pdf" target="_blank" class="btn-download">↓ Tải báo cáo PDF — Bài 2 — Tìm kiếm và đánh giá thông tin học thuật</a>
+    
+    <div class="content-block">
+        <h3><span>2</span> Tìm kiếm và đánh giá thông tin học thuật</h3>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">1. Giới thiệu chủ đề</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Ngành kỹ thuật robot đang phát triển mạnh mẽ và được ứng dụng rộng rãi trong công nghiệp, y tế, logistics và đời sống. Một trong những hướng nghiên cứu quan trọng hiện nay là ứng dụng trí tuệ nhân tạo (AI) trong robot tự hành. Robot tự hành có khả năng cảm nhận môi trường, xử lý thông tin và đưa ra quyết định mà không cần sự điều khiển trực tiếp của con người.
+        </p>
+        <div class="text-box">
+            <strong>Chủ đề được lựa chọn:</strong> “Ứng dụng trí tuệ nhân tạo trong robot tự hành (Autonomous Robots)".<br><br>
+            <strong>Phạm vi tìm kiếm tập trung vào:</strong>
+            <ul style="margin-top: 5px; padding-left: 20px;">
+                <li>Các thuật toán AI cho robot (Machine Learning, Deep Learning).</li>
+                <li>Robot tự hành trong môi trường thực tế.</li>
+                <li>Hệ thống cảm biến và xử lý dữ liệu của robot.</li>
+            </ul>
+        </div>
+        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 10px;">Thông tin được thu thập từ nhiều nguồn khác nhau như Google Scholar, các tạp chí khoa học, sách chuyên khảo và các nguồn mở trên internet.</p>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">2. Phương pháp tìm kiếm thông tin</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">Việc tìm kiếm thông tin được thực hiện thông qua các cơ sở dữ liệu học thuật và nguồn đáng tin cậy.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+                <strong style="color: var(--mint-green);">Công cụ tìm kiếm sử dụng:</strong>
+                <ul style="color: var(--text-muted); margin-top: 10px; padding-left: 20px;">
+                    <li>Google Scholar</li>
+                    <li>IEEE Xplore</li>
+                    <li>SpringerLink</li>
+                    <li>ScienceDirect</li>
+                </ul>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+                <strong style="color: var(--mint-green);">Từ khóa (Keywords):</strong>
+                <ul style="color: var(--text-muted); margin-top: 10px; padding-left: 20px;">
+                    <li>Autonomous robot</li>
+                    <li>AI in robotics</li>
+                    <li>Machine learning for robotics</li>
+                    <li>Robot perception & Autonomous navigation</li>
+                </ul>
+            </div>
+        </div>
+        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 15px;">Sau quá trình tìm kiếm và sàng lọc, tổng cộng 10 tài liệu tham khảo đã được lựa chọn, trong đó có ít nhất 5 bài báo khoa học.</p>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">3. Bảng tổng hợp và đánh giá nguồn thông tin</h4>
+        <div style="overflow-x: auto; margin-top: 15px;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; background: var(--glass-bg);">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--mint-green); color: var(--mint-green);">
+                        <th style="padding: 10px;">STT</th>
+                        <th style="padding: 10px;">Tài liệu</th>
+                        <th style="padding: 10px;">Loại nguồn</th>
+                        <th style="padding: 10px;">Tác giả / NXB - Năm</th>
+                        <th style="padding: 10px;">Độ tin cậy</th>
+                    </tr>
+                </thead>
+                <tbody style="color: var(--text-muted);">
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px;">1</td>
+                        <td style="padding: 10px;">Probabilistic Robotics</td>
+                        <td style="padding: 10px;">Sách</td>
+                        <td style="padding: 10px;">Thrun, Burgard, Fox / MIT Press (2005)</td>
+                        <td style="padding: 10px; color: #4ade80;">Rất cao</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px;">2</td>
+                        <td style="padding: 10px;">Deep Learning for Robotics</td>
+                        <td style="padding: 10px;">Bài báo khoa học</td>
+                        <td style="padding: 10px;">Levine et al. - IEEE (2016)</td>
+                        <td style="padding: 10px; color: #4ade80;">Rất cao</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px;">3</td>
+                        <td style="padding: 10px;">Autonomous Robots: From Biological Inspiration...</td>
+                        <td style="padding: 10px;">Sách</td>
+                        <td style="padding: 10px;">Bekey - MIT Press (2005)</td>
+                        <td style="padding: 10px; color: #facc15;">Cao</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px;">4</td>
+                        <td style="padding: 10px;">Machine Learning in Robotics: A Review</td>
+                        <td style="padding: 10px;">Bài báo khoa học</td>
+                        <td style="padding: 10px;">Kober et al. (2013)</td>
+                        <td style="padding: 10px; color: #4ade80;">Rất cao</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px;">5</td>
+                        <td style="padding: 10px;">Visual Navigation for Autonomous Robots</td>
+                        <td style="padding: 10px;">Bài báo khoa học</td>
+                        <td style="padding: 10px;">Chen et al. (2019)</td>
+                        <td style="padding: 10px; color: #facc15;">Cao</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px;">6</td>
+                        <td style="padding: 10px;">Introduction to Autonomous Mobile Robots</td>
+                        <td style="padding: 10px;">Sách</td>
+                        <td style="padding: 10px;">Siegwart, Nourbakhsh (2011)</td>
+                        <td style="padding: 10px; color: #4ade80;">Rất cao</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px;">7</td>
+                        <td style="padding: 10px;">Robot Operating System (ROS) Documentation</td>
+                        <td style="padding: 10px;">Internet</td>
+                        <td style="padding: 10px;">Open Robotics (2023)</td>
+                        <td style="padding: 10px; color: #facc15;">Cao</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px;">8</td>
+                        <td style="padding: 10px;">IEEE Robotics and Automation Magazine</td>
+                        <td style="padding: 10px;">Tạp chí</td>
+                        <td style="padding: 10px;">IEEE (2020)</td>
+                        <td style="padding: 10px; color: #4ade80;">Rất cao</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px;">9</td>
+                        <td style="padding: 10px;">Robotics: Modelling, Planning and Control</td>
+                        <td style="padding: 10px;">Sách</td>
+                        <td style="padding: 10px;">Siciliano et al. (2009)</td>
+                        <td style="padding: 10px; color: #4ade80;">Rất cao</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px;">10</td>
+                        <td style="padding: 10px;">Autonomous Navigation Using Deep Reinforcement Learning</td>
+                        <td style="padding: 10px;">Bài báo khoa học</td>
+                        <td style="padding: 10px;">Tai et al. (2017)</td>
+                        <td style="padding: 10px; color: #facc15;">Cao</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">4. Đánh giá độ tin cậy của các nguồn</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">Việc đánh giá độ tin cậy của các nguồn được thực hiện dựa trên các tiêu chí sau:</p>
+        <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8;">
+            <li><strong>4.1 Tác giả:</strong> Phần lớn tài liệu được viết bởi các nhà nghiên cứu và giáo sư trong lĩnh vực robot và AI. Ví dụ: Sebastian Thrun – chuyên gia robot nổi tiếng tại Stanford, Bruno Siciliano – nhà nghiên cứu hàng đầu về robot. Điều này giúp đảm bảo tính học thuật và độ tin cậy cao.</li>
+            <li><strong>4.2 Nhà xuất bản / tạp chí:</strong> Nhiều tài liệu được xuất bản bởi các tổ chức khoa học uy tín như IEEE, MIT Press, Springer, Elsevier. Các tổ chức này có quy trình phản biện khoa học (peer review) nghiêm ngặt.</li>
+            <li><strong>4.3 Phương pháp nghiên cứu:</strong> Các bài báo khoa học thường sử dụng thí nghiệm robot thực tế, mô phỏng bằng phần mềm và phân tích thuật toán. Nhờ đó kết quả nghiên cứu có tính khoa học và khả năng kiểm chứng cao.</li>
+            <li><strong>4.4 Số lượng trích dẫn:</strong> Một số tài liệu có số lượng trích dẫn rất lớn trên Google Scholar, ví dụ: Probabilistic Robotics: hơn 20,000 trích dẫn; Machine Learning in Robotics: hàng nghìn trích dẫn. Điều này cho thấy sự ảnh hưởng lớn trong cộng đồng nghiên cứu.</li>
+            <li><strong>4.5 Tính cập nhật:</strong> Ngoài các tài liệu nền tảng, báo cáo cũng sử dụng các nghiên cứu gần đây (2017-2023) để đảm bảo tính cập nhật của thông tin.</li>
+        </ul>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">5. Nhận xét và kết luận</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Qua quá trình tìm kiếm và đánh giá thông tin, có thể thấy rằng các cơ sở dữ liệu học thuật như Google Scholar, IEEE Xplore và ScienceDirect là những nguồn rất quan trọng đối với sinh viên kỹ thuật. Những nguồn này cung cấp các bài báo khoa học chất lượng cao, sách chuyên khảo chuyên sâu và thông tin được kiểm chứng bởi cộng đồng khoa học.<br><br>
+            Đối với ngành kỹ thuật robot, việc sử dụng các nguồn học thuật giúp sinh viên tiếp cận với những công nghệ mới như AI, học máy và robot tự hành. Ngoài ra, quá trình thực hiện bài tập cũng giúp rèn luyện các kỹ năng quan trọng:
+        </p>
+        <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8;">
+            <li>Kỹ năng tìm kiếm tài liệu khoa học</li>
+            <li>Kỹ năng đánh giá độ tin cậy của nguồn</li>
+            <li>Kỹ năng tổng hợp và trích dẫn tài liệu</li>
+        </ul>
+        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 10px;">Những kỹ năng này rất cần thiết cho việc học tập và nghiên cứu trong lĩnh vực kỹ thuật robot.</p>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">6. Danh mục tài liệu tham khảo (Harvard)</h4>
+        <div style="background: #0f172a; padding: 15px; border-radius: 8px; font-family: monospace; color: #e2e8f0; font-size: 0.85rem; line-height: 1.6;">
+            [1] Bekey, G. (2005) <em>Autonomous Robots: From Biological Inspiration to Implementation.</em> MIT Press.<br>
+            [2] Chen, Z. et al. (2019) 'Visual Navigation for Autonomous Robots', <em>IEEE Transactions on Robotics.</em><br>
+            [3] Kober, J., Bagnell, J. and Peters, J. (2013) 'Reinforcement Learning in Robotics', <em>International Journal of Robotics Research.</em><br>
+            [4] Levine, S. et al. (2016) 'End-to-End Training of Deep Visuomotor Policies', <em>Journal of Machine Learning Research.</em><br>
+            [5] Siciliano, B. et al. (2009) <em>Robotics: Modelling, Planning and Control.</em> Springer.<br>
+            [6] Siegwart, R., Nourbakhsh, I. (2011) <em>Introduction to Autonomous Mobile Robots.</em> MIT Press.<br>
+            [7] Tai, L., Paolo, G. and Liu, M. (2017) 'Virtual-to-Real Deep Reinforcement Learning', <em>IEEE International Conference on Intelligent Robots and Systems.</em><br>
+            [8] Thrun, S., Burgard, W., Fox, D. (2005) <em>Probabilistic Robotics.</em> MIT Press.<br>
+            [9] IEEE Robotics and Automation Magazine (2020). IEEE.<br>
+            [10] Open Robotics (2023) Robot Operating System Documentation. Available at: https://www.ros.org
+        </div>
+
+    </div>
+</div>
+
+                    <div id="task3" class="task-detail">
+    <a href="BaoCao_Bai3.pdf" target="_blank" class="btn-download">↓ Tải báo cáo PDF — Bài 3 — Prompt Engineering</a>
+    
+    <div class="content-block">
+        <h3><span>3</span> Viết Prompt hiệu quả cho các tác vụ học tập(Prompt Engineering)</h3>
+        
+        <div class="text-box">
+            <strong>MỤC TIÊU VÀ GIỚI THIỆU</strong><br>
+            Bài tập nhằm phát triển kỹ năng viết prompt hiệu quả để tận dụng tối đa khả năng của các mô hình ngôn ngữ lớn (AI) trong học tập. Thông qua việc thiết kế, thử nghiệm và so sánh các phiên bản prompt, người học sẽ hiểu được tác động của cấu trúc prompt đến chất lượng đầu ra.
+        </div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">I. Lựa chọn và Phân tích tác vụ học tập</h4>
+        <div style="overflow-x: auto; margin-top: 15px;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; background: var(--glass-bg);">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--mint-green); color: var(--mint-green);">
+                        <th style="padding: 10px;">Tác vụ</th>
+                        <th style="padding: 10px;">Mục tiêu & Thách thức</th>
+                        <th style="padding: 10px;">Phân tích bản chất</th>
+                    </tr>
+                </thead>
+                <tbody style="color: var(--text-muted);">
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px; font-weight: bold;">1. Tóm tắt tài liệu học thuật</td>
+                        <td style="padding: 10px;">Chuyển đổi một khối lượng kiến thức lớn thành các ý chính mà không làm mất đi tính logic=.</td>
+                        <td style="padding: 10px;">Cần khả năng trích xuất (extraction) và tổng hợp (synthesis) thông tin theo phân cấp.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px; font-weight: bold;">2. Giải thích khái niệm phức tạp</td>
+                        <td style="padding: 10px;">Làm đơn giản hóa các định nghĩa trừu tượng (như SVD trong Đại số) để dễ hiểu nhưng vẫn chính xác.</td>
+                        <td style="padding: 10px;">Đòi hỏi kỹ thuật sử dụng phép ẩn dụ (metaphor) và điều chỉnh trình độ ngôn ngữ phù hợp với người học.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px; font-weight: bold;">3. Tạo bộ câu hỏi ôn tập</td>
+                        <td style="padding: 10px;">Tạo ra các câu hỏi đánh giá được khả năng vận dụng thay vì chỉ nhớ máy móc.</td>
+                        <td style="padding: 10px;">Cần tư duy phản biện để thiết kế các tình huống có vấn đề (problem-based) và đáp án có tính phân loại.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">II. Xây dựng các phiên bản Prompt</h4>
+        
+        <div style="margin-top: 15px;">
+            <strong style="color: var(--mint-green);">1. Prompt Cơ bản (Basic)</strong>
+            <div class="code-block" style="margin-top: 5px;">
+                "Giải thích cho tôi về ma trận chuyển cơ sở trong Đại số tuyến tính."
+            </div>
+            <img src="prompt_coban.jpg" alt="Kết quả Prompt Cơ bản" class="report-img" style="margin-top: 10px;">
+            <div class="img-caption">Kết quả đầu ra của Prompt Cơ bản</div>
+        </div>
+
+        <div style="margin-top: 25px;">
+            <strong style="color: var(--mint-green);">2. Prompt Cải tiến (Structured)</strong>
+            <div class="code-block" style="margin-top: 5px;">
+                "Hãy giải thích khái niệm ma trận chuyển cơ sở. Nội dung bao gồm: Định nghĩa, công thức thiết lập ma trận từ cơ sở A sang cơ sở B, và một ví dụ minh họa đơn giản trong không gian R^2."
+            </div>
+            <img src="prompt_caitien.jpg" alt="Kết quả Prompt Cải tiến" class="report-img" style="margin-top: 10px;">
+            <div class="img-caption">Kết quả đầu ra của Prompt Cải tiến</div>
+        </div>
+
+        <div style="margin-top: 25px;">
+            <strong style="color: var(--mint-green);">3. Prompt Nâng cao (Advanced - Role + CoT + Few-shot)</strong>
+            <div class="code-block" style="margin-top: 5px;">
+                <strong>Role:</strong> "Bạn là một giáo sư toán học có khả năng sư phạm xuất sắc, chuyên giải thích các khái niệm trừu tượng bằng hình ảnh trực quan."<br><br>
+                <strong>Task:</strong> "Hãy giải thích khái niệm Ma trận chuyển cơ sở cho một sinh viên năm nhất đang cảm thấy bối rối."<br><br>
+                <strong>Constraint & Technique (Chain-of-Thought):</strong><br>
+                1. Hãy bắt đầu bằng một ví dụ thực tế (như việc thay đổi đơn vị đo lường hoặc góc nhìn trong bản đồ).<br>
+                2. Sau đó, hãy dẫn dắt công thức P một cách logic.<br>
+                3. Cuối cùng, hãy đưa ra một 'mẹo' để ghi nhớ chiều chuyển từ cơ sở cũ sang cơ sở mới không bị nhầm lẫn.<br><br>
+                <strong>Few-shot Example:</strong> "Giống như việc bạn đang nói tiếng Anh và muốn chuyển sang tiếng Việt, ma trận chuyển cơ sở đóng vai trò là một người thông dịch viên giúp các con số giữ nguyên ý nghĩa trong một 'ngôn ngữ' (cơ sở) mới."
+            </div>
+            <img src="prompt_nangcao.jpg" alt="Kết quả Prompt Nâng cao" class="report-img" style="margin-top: 10px;">
+            <div class="img-caption">Kết quả đầu ra của Prompt Nâng cao (Góc nhìn trực quan)</div>
+        </div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">III. Thử nghiệm và So sánh kết quả</h4>
+        <div style="overflow-x: auto; margin-top: 15px;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; background: var(--glass-bg);">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--mint-green); color: var(--mint-green);">
+                        <th style="padding: 10px;">Tiêu chí</th>
+                        <th style="padding: 10px;">Prompt Cơ bản</th>
+                        <th style="padding: 10px;">Prompt Cải tiến</th>
+                        <th style="padding: 10px;">Prompt Nâng cao</th>
+                    </tr>
+                </thead>
+                <tbody style="color: var(--text-muted);">
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px; font-weight: bold;">Độ chính xác</td>
+                        <td style="padding: 10px;">Đúng lý thuyết nhưng khô khan.</td>
+                        <td style="padding: 10px;">Đầy đủ cấu trúc.</td>
+                        <td style="padding: 10px; color: #4ade80;">Rất sâu sắc, dễ hiểu.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px; font-weight: bold;">Khả năng ứng dụng</td>
+                        <td style="padding: 10px;">Khó hình dung cách dùng.</td>
+                        <td style="padding: 10px;">Có thể dùng để làm bài tập.</td>
+                        <td style="padding: 10px; color: #4ade80;">Giúp hiểu bản chất và nhớ lâu.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px; font-weight: bold;">Sự khác biệt (Nuance)</td>
+                        <td style="padding: 10px;">Trả lời như từ điển.</td>
+                        <td style="padding: 10px;">Có tính sư phạm hơn.</td>
+                        <td style="padding: 10px; color: #4ade80;">Sắc thái cá nhân hóa cao, kết nối lý thuyết và trực giác.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">IV. Phân tích hiệu quả</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Sự vượt trội của Prompt Nâng cao đến từ việc áp dụng các kỹ thuật cốt lõi:
+        </p>
+        <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8;">
+            <li>Thiết lập <strong>Ngữ cảnh (Role)</strong> giúp AI giới hạn phạm vi kiến thức phù hợp, tránh đưa ra các công thức quá hàn lâm không cần thiết.</li>
+            <li>Sử dụng <strong>Chuỗi tư duy (CoT)</strong> buộc AI phải suy luận từng bước, từ thực tế dẫn dắt đến công thức, tránh việc đưa ra đáp án hời hợt.</li>
+            <li><strong>Mối liên hệ:</strong> Cấu trúc prompt càng chặt chẽ (đủ Context, Task, Constraint) thì chất lượng đầu ra càng ít bị "ảo giác" (hallucination) và bám sát mục tiêu học tập của sinh viên kỹ thuật.</li>
+        </ul>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">V. Tổng hợp nguyên tắc (Framework C.R.E.A.T.E)</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">Để giao tiếp chuyên nghiệp với AI, mình đã đúc kết quy tắc <strong>C.R.E.A.T.E</strong>:</p>
+        <div style="background: rgba(110, 231, 183, 0.1); border-left: 4px solid var(--mint-green); padding: 15px; border-radius: 0 8px 8px 0; margin-top: 15px;">
+            <ul style="color: var(--text-main); margin-left: 10px; line-height: 1.8; list-style-type: none;">
+                <li><strong style="color: var(--mint-green);">[C]</strong>larity (Rõ ràng): Ngôn ngữ không gây hiểu lầm.</li>
+                <li><strong style="color: var(--mint-green);">[R]</strong>ole (Vai trò): Giao vai cụ thể cho AI (VD: Giáo sư toán).</li>
+                <li><strong style="color: var(--mint-green);">[E]</strong>xamples (Ví dụ): Cung cấp Few-shot để định hướng định dạng.</li>
+                <li><strong style="color: var(--mint-green);">[A]</strong>djustment (Điều chỉnh): Tinh chỉnh prompt dựa trên phản hồi đầu tiên.</li>
+                <li><strong style="color: var(--mint-green);">[T]</strong>hought (Tư duy): Yêu cầu AI giải thích các bước suy nghĩ (CoT).</li>
+                <li><strong style="color: var(--mint-green);">[E]</strong>mphasis (Nhấn mạnh): Nêu rõ những gì KHÔNG ĐƯỢC làm để giới hạn rủi ro.</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+                    <div id="task4" class="task-detail">
+    <a href="BaoCao_Bai4.pdf" target="_blank" class="btn-download">↓ Tải báo cáo PDF — Bài 4 — Kỹ năng làm việc nhóm</a>
+    
+    <div class="content-block">
+        <h3><span>4</span> Kỹ năng làm việc nhóm trên nền tảng số</h3>
+        
+        <div class="text-box">
+            <strong>THÔNG TIN DỰ ÁN & VAI TRÒ</strong><br>
+            <strong>Dự án:</strong> Thiết kế và mô phỏng hệ thống Robot hút bụi tự hành tránh vật cản (Phân tích cơ chế điều hướng thông minh).<br>
+            <strong>Vai trò cá nhân:</strong> Phụ trách thiết kế cơ khí (AutoCAD) & Lập trình logic điều hướng (Python).
+        </div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">1. Giới thiệu chung và bối cảnh</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Trong khuôn khổ môn học Nhập môn Số và Trí tuệ nhân tạo, nhóm chúng tôi tiến hành dự án mô phỏng cơ chế tự điều hướng và tránh vật cản của Robot hút bụi. Báo cáo này minh chứng cho quá trình tôi áp dụng các công cụ trực tuyến để phối hợp nhịp nhàng với các thành viên khác, đặc biệt trong việc chia sẻ bản vẽ kỹ thuật, thống nhất thuật toán và viết báo cáo chung.
+        </p>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">2. Kỹ năng thiết lập & sử dụng công cụ</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Đặc thù dự án Robot đòi hỏi kết hợp cả phần cứng và phần mềm, do đó tôi đã đề xuất và cùng nhóm thiết lập 3 công cụ thuộc 3 nhóm chức năng khác nhau:
+        </p>
+        <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8;">
+            <li><strong>Quản lý dự án (Task Management):</strong> Trello</li>
+            <li><strong>Lưu trữ và chia sẻ tệp (Cloud Storage):</strong> Google Drive</li>
+            <li><strong>Giao tiếp & Họp trực tuyến (Communication):</strong> Discord</li>
+        </ul>
+        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 10px;">
+            Tôi đã hoàn thiện hồ sơ cá nhân (avatar, tên thật đúng mã sinh viên) trên cả 3 nền tảng. Đồng thời, tôi thiết lập tính năng liên kết: gắn link thư mục Google Drive chứa bản vẽ AutoCAD trực tiếp vào thẻ mô tả công việc trên Trello để đồng đội dễ dàng truy cập.<br><br>
+            <strong>Tối ưu hóa không gian làm việc:</strong> Trên Trello, tôi tự tạo các Tag (Nhãn) phân loại đặc thù cho kỹ thuật: Nhãn xanh (Hardware/AutoCAD), Nhãn vàng (Software/Python), Nhãn đỏ (Bug/Cần fix gấp).
+        </p>
+        <img src="task4_anh1.jpg" alt="Giao diện Trello" class="report-img">
+        <div class="img-caption">Thiết lập hồ sơ cá nhân và bảng quản lý dự án trên Trello</div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">3. Quản lý tác vụ & Tương tác cá nhân</h4>
+        <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8;">
+            <li><strong>Về quản lý tác vụ:</strong> Được phân công phụ trách bản vẽ khung xe và code logic cảm biến siêu âm, tôi liên tục cập nhật tiến độ trên Trello. Tần suất cập nhật của tôi duy trì ít nhất 3-4 lần/tuần. Khi vẽ xong bản nháp AutoCAD hoặc viết xong một hàm Python, tôi đều tick hoàn thành checklist và đính kèm file mới nhất lên thẻ.</li>
+            <li><strong>Về tương tác cá nhân:</strong> Trong server Discord của nhóm, tần suất tương tác của tôi đạt trên 10 lượt/tuần. Tôi chủ động:
+                <ul style="margin-left: 20px;">
+                    <li>Gửi code snippet (đoạn code Python) lên kênh chat để nhờ các bạn kiểm tra thuật toán logic (ví dụ: vòng lặp while khi khoảng cách vật cản < 20cm).</li>
+                    <li>Hỗ trợ thành viên khác tính toán cơ sở vật lý (lực ma sát, công suất động cơ).</li>
+                    <li>Tham gia đầy đủ các buổi họp Voice hàng tuần để rà soát tiến độ.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">4. Quản lý tài nguyên & Tệp tin</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Do file .dwg (AutoCAD) rất nặng và các file .py (Python) cần quản lý phiên bản nghiêm ngặt, tôi đã thiết lập hệ thống Google Drive dùng chung vô cùng kỷ luật.
+        </p>
+        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 10px;"><strong>Hệ thống thư mục logic (Nhiều cấp):</strong></p>
+        <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8;">
+            <li>Dự án Robot_UET
+                <ul style="margin-left: 20px;">
+                    <li><code>01_Ban_ve_AutoCAD</code> (Chứa khung gầm, vỏ robot)</li>
+                    <li><code>02_Code_Python_Logic</code> (Chứa thuật toán di chuyển)</li>
+                    <li><code>03_Tai_lieu_Cam_bien</code> (Datasheet của cảm biến, tài liệu tham khảo)</li>
+                    <li><code>04_Bao_cao_GoogleDocs</code></li>
+                </ul>
+            </li>
+        </ul>
+        
+        <img src="task4_anh2.jpg" alt="Thư mục Drive phân cấp" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Hệ thống thư mục lưu trữ phân cấp trên Google Drive</div>
+
+        <img src="task4_anh3.jpg" alt="Thư mục Code Python" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Quản lý phiên bản các tệp mã nguồn bên trong thư mục Code_Python_Logic</div>
+
+        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 15px;">
+            <strong>Thiết lập quyền truy cập:</strong> Tôi cài đặt quyền "Viewer" cho thư mục Tai_lieu_Cam_bien để tránh xóa nhầm datasheet, và cấp quyền "Editor" cho thư mục Bao_cao_GoogleDocs.
+        </p>
+        
+        <img src="task4_anh4.jpg" alt="Phân quyền Drive" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Thiết lập phân quyền chỉnh sửa cho thành viên trong nhóm</div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">5. Phân tích hiệu quả, thách thức và giải pháp</h4>
+        
+        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 10px;"><strong>5.1 Phân tích hiệu quả của công cụ</strong></p>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Trello giúp tôi theo dõi sát sao điểm nghẽn của dự án. Google Drive giải quyết triệt để vấn đề mất file hoặc nhầm lẫn giữa code cũ và code mới. Đặc biệt, Discord hỗ trợ gửi định dạng code rất trực quan, giúp việc review thuật toán AI trở nên dễ dàng hơn.
+        </p>
+
+        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 15px;"><strong>5.2 Ba thách thức gặp phải và Cách giải quyết</strong></p>
+        
+        <div style="background: rgba(0,0,0,0.2); border-left: 3px solid #facc15; padding: 15px; margin-top: 10px; border-radius: 0 8px 8px 0;">
+            <strong style="color: #facc15;">Thách thức 1: Trôi thông tin kỹ thuật quan trọng.</strong><br>
+            <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.6; margin-top: 5px;">
+                <li><strong>Phân tích:</strong> Lúc đầu nhóm chỉ dùng 1 kênh chat chung, các tin nhắn báo cáo tiến độ và bàn luận thuật toán bị xen lẫn vào nhau rất khó tìm lại.</li>
+                <li><strong>Giải pháp:</strong> Tôi cấu trúc lại server Discord, tạo các kênh riêng biệt: <code>#hardware-autocad</code>, <code>#software-python</code>, <code>#general-chat</code>. Tôi cũng dùng tính năng "Pin" để ghim các tài liệu API quan trọng.</li>
+            </ul>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.2); border-left: 3px solid #facc15; padding: 15px; margin-top: 15px; border-radius: 0 8px 8px 0;">
+            <strong style="color: #facc15;">Thách thức 2: Xung đột khi viết chung báo cáo.</strong><br>
+            <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.6; margin-top: 5px;">
+                <li><strong>Phân tích:</strong> Khi ghép phần cơ cấu vật lý và mô tả thuật toán trên cùng 1 file Google Docs, các thành viên thường vô tình xóa/sửa nhầm định dạng của nhau.</li>
+                <li><strong>Giải pháp:</strong> Tôi yêu cầu mọi người sử dụng chế độ "Suggesting" (Đề xuất chỉnh sửa). Thay vì xóa thẳng, các thay đổi sẽ hiện dưới dạng góp ý. Nhóm trưởng sẽ là người review cuối cùng và ấn "Chấp nhận" (Tick) để tối ưu nội dung.</li>
+            </ul>
+        </div>
+        
+        <img src="task4_anh5.jpg" alt="Chế độ Suggesting 1" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Các đề xuất chỉnh sửa được lưu lại thành từng khối (block) màu riêng biệt</div>
+
+        <img src="task4_anh6.jpg" alt="Chế độ Suggesting 2" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Thành viên thảo luận trực tiếp trên từng câu chữ qua tính năng Comment</div>
+
+        <div style="background: rgba(0,0,0,0.2); border-left: 3px solid #ef4444; padding: 15px; margin-top: 15px; border-radius: 0 8px 8px 0;">
+            <strong style="color: #ef4444;">Thách thức 3: Phụ thuộc tiến độ chéo (Blocker).</strong><br>
+            <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.6; margin-top: 5px;">
+                <li><strong>Phân tích:</strong> Bạn phụ trách làm Slide không thể bắt đầu vì đợi tôi test xong thuật toán Python.</li>
+                <li><strong>Giải pháp:</strong> Tôi tạo một thẻ Trello tên là "Draft Code Logic" và gắn nhãn đỏ "BLOCKER". Tôi đẩy bản nháp thuật toán lên sớm 2 ngày kèm ảnh chụp màn hình terminal để bạn làm slide có tư liệu thiết kế trước.</li>
+            </ul>
+        </div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">6. Kết luận</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Dự án "Mô phỏng Robot tự hành" không chỉ rèn luyện tư duy lập trình và thiết kế cơ khí mà còn là "thao trường" tuyệt vời để tôi thực hành kỹ năng làm việc nhóm trực tuyến. Việc áp dụng kỷ luật số đã giúp cá nhân tôi hoàn thành xuất sắc tiến độ và hỗ trợ nhóm đạt được mục tiêu chung của môn học một cách khoa học, hiện đại.
+        </p>
+
+    </div>
+</div>
+
+                    <div id="task5" class="task-detail">
+    <a href="BaoCao_Bai5.pdf" target="_blank" class="btn-download">↓ Tải báo cáo PDF — Bài 5 — Sử dụng AI tạo sinh để hỗ trợ sáng tạo nội dung</a>
+    
+    <div class="content-block">
+        <h3><span>5</span> Ứng dụng công cụ AI tạo sinh trong sáng tạo nội dung số</h3>
+        
+        <div class="text-box">
+            <strong>BÁO CÁO BÀI TẬP LỚN: ỨNG DỤNG CÔNG CỤ AI TẠO SINH TRONG SÁNG TẠO NỘI DUNG SỐ</strong><br>
+            <strong>Học phần:</strong> Nhập môn Công nghệ số<br>
+            <strong>Chủ đề dự án:</strong> Thiết kế Infographic giới thiệu về Công nghệ Robot mềm (Soft Robotics) trong Y tế<br>
+            <strong>Sinh viên thực hiện:</strong> Nguyễn Viết Huy<br>
+            <strong>Mã sinh viên:</strong> 25023609<br>
+            <strong>Lớp:</strong> K70 - Kỹ thuật Robot, Đại học Công nghệ (UET) - VNU
+        </div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">I. Giới thiệu dự án</h4>
+        <p style="color: var(--text-main); font-weight: 600; margin-top: 15px;">1. Lý do chọn đề tài</p>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Là một sinh viên ngành Kỹ thuật Robot, tôi nhận thấy Robot mềm (Soft Robotics) là một lĩnh vực mới đầy tiềm năng, thay thế các cấu trúc cứng nhắc bằng vật liệu đàn hồi để tương tác an toàn với con người. Dự án này nhằm tạo ra một sản phẩm truyền thông số (Infographic) để phổ biến kiến thức này đến cộng đồng sinh viên kỹ thuật.
+        </p>
+
+        <p style="color: var(--text-main); font-weight: 600; margin-top: 15px;">2. Các công cụ Al sử dụng</p>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Để hoàn thành dự án, tôi đã phối hợp sử dụng 3 công cụ Al tạo sinh thuộc 3 nhóm khác nhau:
+        </p>
+        <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8;">
+            <li><strong>Google Gemini (Nhóm tạo văn bản):</strong> Sử dụng để nghiên cứu tài liệu, lên dàn ý chi tiết và biên soạn nội dung chuyên môn.</li>
+            <li><strong>Microsoft Designer/DALL-E 3 (Nhóm tạo hình ảnh):</strong> Sử dụng để tạo ra các concept hình ảnh minh họa cho các cấu trúc cơ cấu chấp hành (actuator) mềm mà thực tế khó chụp được.</li>
+            <li><strong>Canva Al - Magic Design (Nhóm hỗ trợ thiết kế):</strong> Sử dụng để tự động hóa bố cục Infographic và phối màu thông minh dựa trên nội dung có sẵn.</li>
+        </ul>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">II. Chi tiết quá trình sử dụng Al và Nhật ký sáng tạo</h4>
+        
+        <p style="color: var(--text-main); font-weight: 600; margin-top: 15px;">1. Giai đoạn 1: Xây dựng nội dung với Google Gemini</p>
+        <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8;">
+            <li><strong>Prompt sử dụng:</strong> "Tôi là sinh viên ngành Kỹ thuật Robot. Hãy đóng vai một chuyên gia, giúp tôi lên dàn ý cho một Infographic về 'Robot mềm trong phẫu thuật'. Nội dung cần chia thành 4 phần: Định nghĩa, Ưu điểm so với robot cứng, Các vật liệu phổ biến (elastomer), và Tương lai ứng dụng. Yêu cầu ngôn ngữ chuyên môn nhưng cô đọng."</li>
+            <li><strong>Kết quả nhận được:</strong> Gemini đã cung cấp một cấu trúc logic với các thuật ngữ chính xác như 'Continuum robots', 'Bio-inspired design'.</li>
+            <li><strong>Sự chỉnh sửa và tích hợp cá nhân:</strong> Tôi nhận thấy nội dung Gemini đưa ra hơi thiên về lý thuyết. Tôi đã chủ động tra cứu thêm các nghiên cứu tại phòng Lab của UET để bổ sung phần ứng dụng thực tế và điều chỉnh lại các thông số lực ép của vật liệu để đảm bảo tính kỹ thuật chính xác. (Đóng góp cá nhân: 60%).</li>
+        </ul>
+        <img src="task5_anh1.jpg" alt="Gemini Outline" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Dàn ý Infographic Robot Mềm Phẫu Thuật với Google Gemini</div>
+
+        <p style="color: var(--text-main); font-weight: 600; margin-top: 25px;">2. Giai đoạn 2: Sáng tạo hình ảnh minh họa với Chat GPT</p>
+        <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8;">
+            <li><strong>Prompt sử dụng:</strong> "A high-tech, realistic 3D render of a soft robotic gripper inspired by an elephant trunk, holding a delicate surgical needle, blue and white aesthetic, laboratory background, cinematic lighting."</li>
+            <li><strong>Quá trình điều chỉnh:</strong> Ban đầu Al tạo ra hình ảnh trông quá giống đồ chơi. Tôi đã phải bổ sung các từ khóa kỹ thuật như 'biomimetic', 'pneumatic networks' và 'macro photography' để có được hình ảnh chuyên nghiệp hơn.</li>
+        </ul>
+        <img src="task5_anh2.jpg" alt="ChatGPT Lần 1" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Hình ảnh AI tạo ra ban đầu</div>
+        <img src="task5_anh3.jpg" alt="ChatGPT Lần 2" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Hình ảnh sau khi bổ sung từ khóa chuyên ngành ('biomimetic', 'pneumatic networks'...)</div>
+
+        <p style="color: var(--text-main); font-weight: 600; margin-top: 25px;">3. Giai đoạn 3: Thiết kế sản phẩm cuối cùng trên Canva Al</p>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Tôi đã tải nội dung từ Gemini và hình ảnh từ GPT lên Canva. Sử dụng tính năng Magic Design, tôi nhập mô tả "Infographic kỹ thuật cho Robot mềm".<br>
+            <strong>Sự can thiệp cá nhân:</strong> Al chỉ đưa ra khung cơ bản. Tôi đã tự tay sắp xếp lại thứ tự các khối thông tin theo luồng đọc của kỹ sư, thay đổi font chữ sang 'Roboto' để tạo cảm giác kỹ thuật, và thêm các biểu tượng (icons) về vi điều khiển Arduino để kết nối nội dung với thực tế học tập.
+        </p>
+        <img src="task5_anh4.jpg" alt="Canva UI Khung cơ bản" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Sử dụng Canva AI tạo cấu trúc Infographic ban đầu</div>
+        <img src="task5_anh5.jpg" alt="Canva UI Tinh chỉnh slide 1" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Quá trình tự tay tinh chỉnh, sắp xếp bố cục theo tư duy kỹ sư (Slide Tiêu đề)</div>
+        <img src="task5_anh6.jpg" alt="Canva UI Tinh chỉnh slide 2" class="report-img" style="margin-top: 15px;">
+        <div class="img-caption">Quá trình tự tay tinh chỉnh, sắp xếp bố cục theo tư duy kỹ sư (Slide Nội dung)</div>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">III. So sánh và phân tích hiệu quả công cụ</h4>
+        <div style="overflow-x: auto; margin-top: 15px;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; background: var(--glass-bg);">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--mint-green); color: var(--mint-green);">
+                        <th style="padding: 10px; width: 15%;">Công cụ</th>
+                        <th style="padding: 10px; width: 35%;">Điểm mạnh</th>
+                        <th style="padding: 10px; width: 35%;">Điểm yếu / Hạn chế</th>
+                        <th style="padding: 10px; width: 15%;">Đánh giá hiệu quả</th>
+                    </tr>
+                </thead>
+                <tbody style="color: var(--text-muted);">
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px; font-weight: bold; color: var(--text-main);">Google Gemini</td>
+                        <td style="padding: 10px;">Tư duy logic tốt, hiểu sâu các thuật ngữ kỹ thuật, tốc độ phản hồi nhanh.</td>
+                        <td style="padding: 10px;">Văn phong đôi khi còn cứng nhắc, cần kiểm chứng lại số liệu vì dễ bị "ảo giác".</td>
+                        <td style="padding: 10px; color: #4ade80; font-weight: bold;">90%</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px; font-weight: bold; color: var(--text-main);">GPT</td>
+                        <td style="padding: 10px;">Sáng tạo hình ảnh từ mô tả văn bản rất tốt, màu sắc chuyên nghiệp.</td>
+                        <td style="padding: 10px;">Khó tạo ra sơ đồ mạch điện chính xác tuyệt đối theo tiêu chuẩn kỹ thuật.</td>
+                        <td style="padding: 10px; color: #4ade80; font-weight: bold;">85%</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 10px; font-weight: bold; color: var(--text-main);">Canva Al</td>
+                        <td style="padding: 10px;">Tiết kiệm thời gian sắp xếp bố cục ban đầu, thư viện hình ảnh hỗ trợ phong phú.</td>
+                        <td style="padding: 10px;">Các mẫu thiết kế còn mang tính tổng quát, chưa chuyên sâu cho ngành robot.</td>
+                        <td style="padding: 10px; color: #facc15; font-weight: bold;">80%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 15px;">
+            <strong>Phân tích sâu:</strong> Sự kết hợp giữa Gemini (não bộ nội dung) và Canva (cơ thể trình bày) tạo ra một quy trình làm việc khép kín. Tuy nhiên, vai trò của người kỹ sư là "trọng tài" để sàng lọc và điều chỉnh là quan trọng nhất để đảm bảo sản phẩm không bị hời hợt.
+        </p>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">IV. Vai trò của Al và Vấn đề đạo đức trong sáng tạo</h4>
+        
+        <p style="color: var(--text-main); font-weight: 600; margin-top: 15px;">1. Sự thay đổi quy trình sáng tạo</p>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Trước đây, để làm một Infographic, tôi mất khoảng 10 giờ. Nhờ Al, quy trình này rút ngắn xuống còn 4 giờ. Al không thay thế tôi sáng tạo, nó đóng vai trò là một "người cộng sự" cấp cao, lo liệu các công việc mang tính thực thi lặp lại để tôi tập trung vào tư duy chiến lược và kiểm định chuyên môn.
+        </p>
+
+        <p style="color: var(--text-main); font-weight: 600; margin-top: 15px;">2. Vấn đề đạo đức và trách nhiệm</p>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Việc sử dụng Al trong môi trường học thuật đòi hỏi sự minh bạch tuyệt đối. Tôi nhận thức rõ các vấn đề về:
+        </p>
+        <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8;">
+            <li><strong>Bản quyền:</strong> Hình ảnh do Al tạo ra dựa trên dữ liệu khổng lồ, do đó không nên coi đó là tài sản độc quyền hoàn toàn.</li>
+            <li><strong>Tính chính xác:</strong> Trong ngành Robot, một sai sót nhỏ trong thông số có thể dẫn đến hậu quả lớn. Sự phụ thuộc quá mức vào Al mà thiếu kiểm chứng thực tế là một rủi ro đạo đức nghề nghiệp.</li>
+            <li><strong>Liêm chính:</strong> Tôi cam kết khai báo đầy đủ các phần có sự hỗ trợ của Al và đảm bảo giá trị cốt lõi của bài báo cáo vẫn nằm ở tư duy phân tích của bản thân.</li>
+        </ul>
+
+        <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">V. Kết luận</h4>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+            Dự án đã giúp tôi làm chủ được các công cụ Al hiện đại, đồng thời củng cố kiến thức chuyên ngành về Soft Robotics. Để đạt được điểm tối đa, tôi hiểu rằng công nghệ chỉ là công cụ, còn sự tỉ mỉ và dấu ấn cá nhân mới là yếu tố quyết định giá trị của một kỹ sư.
+        </p>
+
+    </div>
+</div>
+                    <div id="task6" class="task-detail">
+                        <a href="BaoCao_Bai6.pdf" target="_blank" class="btn-download">↓ Tải báo cáo PDF — Bài 6 — Sử dụng AI có trách nhiệm trong học tập và nghiên cứu </a>
+                        
+                        <div class="content-block">
+                            <h3><span>6</span> Sử dụng AI có trách nhiệm trong học tập và nghiên cứu (Đạo đức học thuật)</h3>
+                            
+                            <div class="text-box">
+                                <strong>BÁO CÁO BÀI TẬP: SỬ DỤNG AI CÓ TRÁCH NHIỆM TRONG HỌC TẬP VÀ NGHIÊN CỨU</strong><br>
+                                <strong>Họ và tên:</strong> Nguyễn Viết Huy<br>
+                                <strong>Ngành:</strong> Kỹ thuật Robot - Đại học Công nghệ (UET), ĐHQGHN
+                            </div>
+
+                            <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">I. Nghiên cứu chính sách về việc sử dụng AI trong học tập và nghiên cứu</h4>
+                            
+                            <p style="color: var(--text-main); font-weight: 600; margin-top: 15px;">1. Đánh giá chính sách tại trường đang theo học (UET - ĐHQGHN)</p>
+                            <p style="color: var(--text-muted); line-height: 1.6;">
+                                Hiện tại, Đại học Công nghệ (UET) cũng như Đại học Quốc gia Hà Nội nói chung đang quản lý việc sử dụng AI chủ yếu thông qua lăng kính của các Quy định về Liêm chính học thuật và Quy chế đào tạo. Mặc dù chưa có một bộ luật độc lập và chi tiết quy định từng ranh giới cụ thể dành riêng cho Generative AI (AI tạo sinh), các hành vi như sao chép toàn bộ kết quả của AI đưa vào báo cáo môn học, đồ án mà không trích dẫn đều bị xếp vào dạng đạo văn và gian lận kết quả nghiên cứu.
+                            </p>
+
+                            <p style="color: var(--text-main); font-weight: 600; margin-top: 15px;">2. So sánh với các cơ sở giáo dục khác</p>
+                            <p style="color: var(--text-muted); line-height: 1.6;">
+                                Khi đối chiếu với chính sách của một số trường đại học quốc tế hoặc các trường như RMIT Việt Nam, có thể thấy một sự khác biệt rõ rệt về mức độ chi tiết. Tại RMIT, sinh viên được cung cấp hướng dẫn rõ ràng về việc AI được phép sử dụng ở những khâu nào (như tìm kiếm ý tưởng, tóm tắt tài liệu, kiểm tra ngữ pháp) và nghiêm cấm sử dụng AI để trực tiếp tạo ra sản phẩm đánh giá cuối cùng. Họ cũng yêu cầu hình thức trích dẫn (APA/Harvard) cụ thể cho các công cụ AI.
+                            </p>
+
+                            <p style="color: var(--text-main); font-weight: 600; margin-top: 15px;">3. Nhận định cá nhân</p>
+                            <p style="color: var(--text-muted); line-height: 1.6;">
+                                Việc thiếu vắng một bộ quy tắc chi tiết, mang tính hệ thống dành riêng cho AI tại trường là một rào cản, khiến sinh viên đôi khi hoang mang giữa việc "sử dụng công cụ hỗ trợ" và "vi phạm quy chế". Trong bối cảnh công nghệ thay đổi từng ngày, nhà trường cần sớm ban hành các khung hướng dẫn cụ thể, vừa khuyến khích sinh viên ngành kỹ thuật làm chủ công cụ mới, vừa bảo vệ tính minh bạch của môi trường học thuật.
+                            </p>
+
+                            <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">II. Thực hiện nhiệm vụ học tập với sự hỗ trợ của AI</h4>
+                            
+                            <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.8; margin-top: 15px;">
+                                <li><strong>1. Mô tả nhiệm vụ:</strong> Tìm hiểu nguyên lý hoạt động của cấu trúc cơ cấu chấp hành khí nén mềm (Soft Pneumatic Actuators) và lên khung mã code cơ bản trên vi điều khiển Arduino Uno R3 để phục vụ cho báo cáo môn học.</li>
+                                <li style="margin-top: 10px;"><strong>2. Quá trình sử dụng AI:</strong>
+                                    <div class="code-block" style="margin-top: 5px;">
+                                        <strong>Prompt đã sử dụng:</strong> "Đóng vai là một kỹ sư robot, hãy giải thích ngắn gọn nguyên lý hoạt động của Soft Pneumatic Actuators trong 3 câu. Sau đó, viết một đoạn code C++ cơ bản cho Arduino Uno R3 để điều khiển bật/tắt một van khí nén (giả sử nối với chân số 8) theo chu kỳ 2 giây."
+                                    </div>
+                                    <p style="margin-top: 5px;"><strong>Đầu ra của AI:</strong> AI đã cung cấp một đoạn giải thích chính xác về việc sử dụng áp suất khí nén để làm biến dạng vật liệu đàn hồi (như silicone), tạo ra chuyển động uốn cong hoặc co giãn. Đi kèm là đoạn code Arduino sử dụng hàm <code>pinMode(8, OUTPUT);</code> và <code>digitalWrite()</code> kết hợp với hàm <code>delay(2000);</code>.</p>
+                                </li>
+                                <li style="margin-top: 10px;"><strong>3. Cách đánh giá, chỉnh sửa và tích hợp đầu ra của AI:</strong>
+                                    <ul style="margin-left: 20px;">
+                                        <li><strong>Đánh giá:</strong> Phần lý thuyết AI đưa ra khái quát và dễ hiểu, phù hợp để làm phần mở đầu báo cáo. Tuy nhiên, phần code Arduino dùng hàm <code>delay()</code> là một cách lập trình chưa tối ưu trong thực tế vì nó sẽ chặn (block) toàn bộ hệ thống, khiến vi điều khiển không thể đọc các cảm biến khác trong lúc chờ.</li>
+                                        <li><strong>Chỉnh sửa:</strong> Tôi đã giữ lại ý tưởng cốt lõi của phần lý thuyết, đối chiếu lại với giáo trình chuyên ngành và diễn đạt lại bằng ngôn ngữ của mình. Với phần code, tôi không dùng nguyên bản của AI mà tự viết lại, thay thế hàm <code>delay()</code> bằng hàm <code>millis()</code> để tối ưu hóa khả năng đa nhiệm của bo mạch.</li>
+                                        <li><strong>Tích hợp:</strong> Thông tin được đưa vào báo cáo như một cơ sở tham khảo ban đầu để định hướng các bước thiết kế phần cứng tiếp theo.</li>
+                                    </ul>
+                                </li>
+                                <li style="margin-top: 10px;"><strong>4. Trích dẫn việc sử dụng AI (Theo chuẩn APA):</strong> Gemini pro.</li>
+                            </ul>
+                            
+                            <img src="task6_anh1.jpg" alt="Đoạn Code C++ AI tạo" class="report-img" style="margin-top: 15px;">
+                            <div class="img-caption">Đoạn mã C++ điều khiển van khí nén do AI gợi ý (Chưa tối ưu hàm delay)</div>
+                            <img src="task6_anh2.jpg" alt="Giao diện chat Gemini" class="report-img" style="margin-top: 15px;">
+                            <div class="img-caption">Giao diện hỏi đáp giải thích nguyên lý Soft Pneumatic Actuators với Gemini</div>
+
+                            <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">III. Phân tích các vấn đề đạo đức liên quan đến sử dụng AI</h4>
+                            
+                            <div style="background: rgba(0,0,0,0.2); border-left: 3px solid var(--mint-green); padding: 15px; margin-top: 15px; border-radius: 0 8px 8px 0;">
+                                <strong style="color: var(--text-main);">1. Ranh giới giữa hỗ trợ hợp lý và gian lận học thuật</strong><br>
+                                <ul style="color: var(--text-muted); margin-left: 20px; line-height: 1.6; margin-top: 5px; font-size: 0.95rem;">
+                                    <li><strong>Hỗ trợ hợp lý:</strong> Sử dụng AI như một công cụ tối ưu hóa hiệu suất (ví dụ: gỡ lỗi cú pháp khi thao tác trên AutoCAD, kiểm tra lại các bước biến đổi công thức trong Giải tích/Vật lý đại cương, hoặc tìm kiếm tài liệu tham khảo).</li>
+                                    <li><strong>Gian lận học thuật:</strong> Yêu cầu AI làm toàn bộ bài tập lớn, giải hộ các bài toán cốt lõi hoặc viết toàn bộ báo cáo rồi nộp dưới tên mình. Hành động này qua mặt quy trình đánh giá năng lực thực chất của giảng viên.</li>
+                                </ul>
+                            </div>
+
+                            <div style="background: rgba(0,0,0,0.2); border-left: 3px solid #facc15; padding: 15px; margin-top: 15px; border-radius: 0 8px 8px 0;">
+                                <strong style="color: var(--text-main);">2. Vấn đề về quyền sở hữu trí tuệ và trích dẫn</strong><br>
+                                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 5px; line-height: 1.6;">
+                                    Các mô hình AI được huấn luyện dựa trên hàng tỷ điểm dữ liệu từ internet, bao gồm cả các tài liệu có bản quyền, chất xám của các nhà nghiên cứu đi trước. Khi sinh viên sử dụng câu chữ của AI mà không trích dẫn, bản chất là đang chiếm đoạt các nguồn dữ liệu gốc đó mà không ghi nhận công lao của tác giả, vi phạm nghiêm trọng đạo đức nghiên cứu.
+                                </p>
+                            </div>
+
+                            <div style="background: rgba(0,0,0,0.2); border-left: 3px solid #ef4444; padding: 15px; margin-top: 15px; border-radius: 0 8px 8px 0;">
+                                <strong style="color: var(--text-main);">3. Tác động đến quá trình học tập và phát triển kỹ năng</strong><br>
+                                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 5px; line-height: 1.6;">
+                                    Đây là tác động nguy hiểm nhất. Việc lạm dụng AI để giải quyết các vấn đề khó khăn sẽ tạo ra thói quen ỷ lại. Đối với một kỹ sư trong tương lai, nếu bỏ qua quá trình tự vật lộn với các môn khoa học cơ bản, sinh viên sẽ mất đi tư duy phản biện (critical thinking) và khả năng giải quyết vấn đề (problem-solving) từ gốc rễ. Khi gặp phải một bài toán kỹ thuật mới chưa từng có trên internet, một kỹ sư phụ thuộc vào AI sẽ hoàn toàn mất khả năng xử lý.
+                                </p>
+                            </div>
+
+                            <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">IV. Bộ nguyên tắc cá nhân về cách sử dụng AI có trách nhiệm (6 Nguyên tắc)</h4>
+                            <p style="color: var(--text-muted); line-height: 1.6;">Dựa trên quá trình học tập và quan điểm cá nhân, tôi xây dựng bộ 6 nguyên tắc sau:</p>
+                            
+                            <ul style="color: var(--text-main); margin-left: 20px; line-height: 1.8; margin-top: 10px;">
+                                <li><strong style="color: var(--mint-green);">1. Chủ động Tư duy (Ownership):</strong> AI chỉ là công cụ gợi ý, người đưa ra quyết định cuối cùng và chịu trách nhiệm cho độ chính xác của đồ án, bản vẽ hay dòng code phải là chính tôi.</li>
+                                <li><strong style="color: var(--mint-green);">2. Xác thực thông tin (Verification):</strong> Luôn coi dữ liệu AI đưa ra là "bản nháp cần kiểm chứng". Mọi số liệu kỹ thuật, thông số vật lý đều phải đối chiếu chéo (cross-check) với các tài liệu chính thống, sách giáo khoa hoặc datasheet của linh kiện.</li>
+                                <li><strong style="color: var(--mint-green);">3. Minh bạch trong Trích dẫn (Transparency):</strong> Bất kỳ phần ý tưởng hoặc đoạn văn bản nào mượn từ AI đều phải được khai báo rõ ràng và trích dẫn đúng chuẩn trong các báo cáo nhóm.</li>
+                                <li><strong style="color: var(--mint-green);">4. Bảo vệ Dữ liệu (Data Privacy):</strong> Tuyệt đối không nhập các thông tin nhạy cảm cá nhân, dữ liệu bản quyền, nội dung của các dự án nhóm đang trong vòng bảo mật lên các nền tảng AI công cộng.</li>
+                                <li><strong style="color: var(--mint-green);">5. Nâng cấp bản thân, không Thay thế bản thân (Augmentation, not Replacement):</strong> Sử dụng AI để mở rộng kiến thức, tiết kiệm thời gian làm các tác vụ lặp đi lặp lại, thay vì dùng nó để trốn tránh việc học các kiến thức nền tảng.</li>
+                                <li><strong style="color: var(--mint-green);">6. Tôn trọng bản quyền (Respect IP):</strong> Không sử dụng các công cụ AI nhằm mục đích tẩy xóa watermark bản quyền, hoặc cố tình xáo trộn câu chữ để lách qua các phần mềm kiểm tra đạo văn (như Turnitin/DoIT).</li>
+                            </ul>
+
+                            <h4 style="margin-top: 25px; color: var(--text-muted); text-transform: uppercase;">V. Infographic minh họa</h4>
+                            <img src="task6_anh3.jpg" alt="Infographic 6 nguyên tắc AI" class="report-img" style="margin-top: 15px;">
+                            <div class="img-caption">Infographic: Bộ 6 nguyên tắc sử dụng AI có trách nhiệm dành cho Sinh viên Kỹ thuật Robot</div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="tong-ket" class="section">
+            <div class="badge">TRANG 3 / 3</div>
+            <h2 style="font-size: 2rem; margin-bottom: 25px;">Tổng kết & Đánh giá bản thân</h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h2>6</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Nhiệm vụ hoàn thành</p>
+                </div>
+                <div class="stat-card">
+                    <h2>12</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Tuần học tập</p>
+                </div>
+                <div class="stat-card">
+                    <h2>7+</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Công cụ số thành thạo</p>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="color: var(--mint-green); margin-bottom: 10px;">Trải nghiệm & Cảm nhận cá nhân</h3>
+                <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 20px;">
+                    Thông qua các học phần về Prompt Engineering (Bài 3) và Sáng tạo nội dung (Bài 5), tư duy tiếp cận công nghệ của tôi đã hoàn toàn thay đổi. Tôi thấm thía một quy luật: "Giới hạn của AI chính là giới hạn trong tư duy khai thác của người dùng". Thành quả rõ rệt nhất là việc tối ưu hóa hiệu suất, rút ngắn thời gian xử lý công việc từ 5 giờ xuống chỉ còn 2 giờ nhờ tích hợp đồng bộ ChatGPT, Gemini và Canva AI. Đây không chỉ là sự tiện lợi của công cụ, mà là minh chứng sắc nét cho sức mạnh của tư duy hệ thống.
+                </p>
+                
+                <h3 style="color: var(--mint-green); margin-bottom: 10px;">Khó khăn lớn nhất đã vượt qua</h3>
+                <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 20px;">
+                    Thách thức lớn nhất không nằm ở công nghệ, mà ở việc thiết lập trật tự từ sự hỗn loạn trong làm việc nhóm (Bài 4). Quá trình chuẩn hóa Naming Convention, triển khai hệ thống Kanban (Trello) và xây dựng luồng làm việc bất đồng bộ là một phép thử khắc nghiệt. Nó vượt xa một bài toán kỹ thuật thông thường để trở thành một trải nghiệm thực tế về năng lực quản trị: làm sao để thuyết phục, gắn kết và đồng bộ hóa thói quen của một tập thể mang nhiều cá tính khác biệt.
+                </p>
+                
+                <h3 style="color: var(--mint-green); margin-bottom: 10px;">Bước chuyển mình về nhận thức</h3>
+                <p style="color: var(--text-muted); line-height: 1.7;">
+                    Bước ngoặt lớn nhất là việc phá bỏ định kiến xem AI như một "cỗ máy làm hộ". Giờ đây, tôi định vị AI là một cộng sự chiến lược—nơi máy móc đảm nhiệm khối lượng xử lý, còn con người nắm giữ tư duy điều hướng và bộ lọc kiểm chứng cuối cùng. Trải nghiệm này dạy tôi rằng, đỉnh cao của việc làm chủ công nghệ không chỉ là biết cách dùng AI hiệu quả, mà là bản lĩnh nhận định được khi nào tuyệt đối KHÔNG NÊN lạm dụng nó.
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="margin-bottom: 15px;">Kho tài liệu – Tải về toàn bộ bài tập</h3>
+                <div class="document-grid">
+                    <a href="BaoCao_Bai1.pdf" target="_blank" class="doc-item">📄 Bài 1 - Thao tác cơ bản với tệp tin và thư mục (PDF)</a>
+                    <a href="BaoCao_Bai2.pdf" target="_blank" class="doc-item">📄 Bài 2 - Tìm kiếm và đánh giá thông tin học thuật (PDF)</a>
+                    <a href="BaoCao_Bai3.pdf" target="_blank" class="doc-item">📄 Bài 3 - Viết prompt hiệu quả cho các tác vụ học tập (PDF)</a>
+                    <a href="BaoCao_Bai4.pdf" target="_blank" class="doc-item">📄 Bài 4 - Kỹ năng làm việc nhóm trên nền tảng số (PDF)</a>
+                    <a href="BaoCao_Bai5.pdf" target="_blank" class="doc-item">📄 Bài 5 - Sử dụng AI tạo sinh để hỗ trợ sáng tạo nội dung (PDF)</a>
+                    <a href="BaoCao_Bai6.pdf" target="_blank" class="doc-item">📄 Bài 6 - Sử dụng AI có trách nhiệm trong học tập và nghiên cứu (PDF)</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="music-widget">
+        <div class="play-btn">▶</div>
+        <div style="font-size: 0.85rem;">
+            <div style="font-weight: 600;">Lofi Study Chill</div>
+            <div style="color: var(--text-muted); font-size: 0.75rem;">Đang phát...</div>
+        </div>
+    </div>
+
+    <script>
+        function switchPage(pageId, btn) {
+            // Đổi tab Header
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Đổi nội dung Main
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function switchTask(taskId, btn) {
+            // Đổi active sidebar
+            document.querySelectorAll('.task-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Đổi nội dung dự án
+            document.querySelectorAll('.task-detail').forEach(t => t.classList.remove('active'));
+            document.getElementById(taskId).classList.add('active');
+        }
+    </script>
+
+<div class="music-widget" onclick="toggleMusic()" style="cursor: pointer;">
+        <audio id="bgMusic" loop>
+            <source src="bai-hat-cua-toi.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="play-btn" id="playIcon">▶</div>
+        <div style="font-size: 0.85rem;">
+            <div style="font-weight: 600;">Lofi Study Chill</div>
+            <div id="musicStatus" style="color: var(--text-muted); font-size: 0.75rem;">Nhấn để phát...</div>
+        </div>
+    </div>
+
+    <script>
+        // --- TÍNH NĂNG PHÁT NHẠC ---
+        var bgMusic = document.getElementById("bgMusic");
+        var playIcon = document.getElementById("playIcon");
+        var musicStatus = document.getElementById("musicStatus");
+        var isPlaying = false;
+        var hasAutoPlayed = false; // Biến ghi nhận xem nhạc đã tự phát chưa
+
+        // Tự động phát nhạc khi người dùng click vào BẤT KỲ ĐÂU trên trang lần đầu tiên
+        document.body.addEventListener('click', function() {
+            if (!hasAutoPlayed && !isPlaying) {
+                bgMusic.play();
+                playIcon.innerHTML = "⏸";
+                musicStatus.innerHTML = "Đang phát...";
+                isPlaying = true;
+                hasAutoPlayed = true; // Đánh dấu là đã tự động phát
+            }
+        });
+
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                playIcon.innerHTML = "▶"; 
+                musicStatus.innerHTML = "Đã tạm dừng";
+            } else {
+                bgMusic.play();
+                playIcon.innerHTML = "⏸"; 
+                musicStatus.innerHTML = "Đang phát...";
+            }
+            isPlaying = !isPlaying;
+            hasAutoPlayed = true; // Chặn chức năng tự phát nếu người dùng đã tự tay bấm
+        }
+    </script>
+</body>
+</html>
